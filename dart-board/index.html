@@ -88,8 +88,8 @@
 
                 let midAngle = lerp(angle1, angle2, 0.5);
 
-                const x = width / 2 + Math.sin(midAngle) * outerRadius;
-                const y = width / 2 + Math.cos(midAngle) * outerRadius;
+                const x = width / 2 + Math.cos(midAngle) * outerRadius;
+                const y = width / 2 + Math.sin(midAngle) * outerRadius;
                 // console.log(x, y)
                 ctx.beginPath();
                 ctx.strokeStyle = colors.light;
@@ -124,11 +124,11 @@
                 const angle1 = (i / segments) * Math.PI * 2;
                 const angle2 = ((i + 1) / segments) * Math.PI * 2;
 
-                const x1 = width / 2 + Math.sin(angle1) * innerRadius
-                const y1 = height / 2 + Math.cos(angle1) * innerRadius;
+                const x1 = width / 2 + Math.cos(angle1) * innerRadius
+                const y1 = height / 2 + Math.sin(angle1) * innerRadius;
 
-                const x2 = width / 2 + Math.sin(angle2) * innerRadius
-                const y2 = height / 2 + Math.cos(angle2) * innerRadius;
+                const x2 = width / 2 + Math.cos(angle2) * innerRadius
+                const y2 = height / 2 + Math.sin(angle2) * innerRadius;
 
                 ctx.beginPath();
                 ctx.moveTo(width / 2, height / 2,);
