@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dart board</title>
+</head>
+
+<body>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+    <canvas></canvas>
+    <script>
+        const colors = {
+            even: "red",
+            odd: "green",
+            light: "#fff",
+            dark: "#000"
+        }
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        const width = 500;
+        const height = 500;
+        const size = 450;
+        const innerRadius = 160;
+        const outerRadius = 180;
+        const values = [1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20].reverse()
+
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const segments = 20;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // outer circle
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, outerRadius, 0, Math.PI * 2);
+        ctx.lineWidth = 40
+        ctx.stroke();
+
+        ctx.lineWidth = 1;
+
+        drawRadialLines();
+        drawStrokedAngles(innerRadius / 2);
+        drawStrokedAngles(innerRadius);
+        drawRadialText();
+        // second small inner circle
+        drawCircle(15, colors.odd);
+        // small inner circle
+        drawCircle(8, colors.even);
+
+
+        function drawCircle(radius, fill) {
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+            ctx.lineWidth = 1;
+            ctx.fillStyle = fill;
+            ctx.strokeStyle = colors.light;
+            ctx.lineWidth = radius * 0.5;
+            ctx.stroke();
+            ctx.fill();
+        }
+
+
+        function lerp(a, b, t) {
+            return a + (b - a) * t;
+        }
+
+        function drawRadialText() {
+            for (let i = 0; i < values.length; i++) {
+                const angle1 = (i / values.length - 1) * Math.PI * 2;
+                const angle2 = ((i + 1) / values.length) * Math.PI * 2;
+
+                let midAngle = lerp(angle1, angle2, 0.5);
+
+                const x = width / 2 + Math.sin(midAngle) * outerRadius;
+                const y = width / 2 + Math.cos(midAngle) * outerRadius;
+                // console.log(x, y)
+                ctx.beginPath();
+                ctx.strokeStyle = colors.light;
+                ctx.lineWidth = 1;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = "20px Arial";
+                ctx.fillStyle = colors.light;
+                ctx.fillText(values[i], x, y);
+            }
+        }
+
+        function drawStrokedAngles(radius) {
+            for (let i = 0; i < segments; i++) {
+                const angle1 = (i / segments) * Math.PI * 2;
+                const angle2 = ((i + 1) / segments) * Math.PI * 2;
+
+                ctx.beginPath();
+
+                ctx.arc(width / 2, height / 2, radius, angle1, angle2);
+
+                ctx.strokeStyle = i % 2 === 0 ? colors.even : colors.odd;
+
+                ctx.lineWidth = 12
+
+                ctx.stroke();
+            }
+        }
+
+        function drawRadialLines() {
+            for (let i = 0; i <= segments; i++) {
+                const angle1 = (i / segments) * Math.PI * 2;
+                const angle2 = ((i + 1) / segments) * Math.PI * 2;
+
+                const x1 = width / 2 + Math.sin(angle1) * innerRadius
+                const y1 = height / 2 + Math.cos(angle1) * innerRadius;
+
+                const x2 = width / 2 + Math.sin(angle2) * innerRadius
+                const y2 = height / 2 + Math.cos(angle2) * innerRadius;
+
+                ctx.beginPath();
+                ctx.moveTo(width / 2, height / 2,);
+                ctx.lineTo(x1, y1);
+                ctx.stroke();
+
+                if (i % 2 === 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2, height / 2,);
+
+                    ctx.lineTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.closePath();
+                    ctx.fillStyle = colors.dark
+                    ctx.fill();
+                }
+                else{
+                    ctx.fillStyle = colors.light;
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2, height / 2,);
+                    ctx.lineTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.fill();
+                }
+                ctx.stroke()
+            }
+
+        }
+    </script>
+</body>
+
+</html>
