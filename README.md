@@ -1,2 +1,1 @@
-# canvas-sketches
-# canvas-sketches
+A collection of 2d canvas sketches I'll be drawing over time.
