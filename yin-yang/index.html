@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yin Yang</title>
+</head>
+
+<body>
+    <style>
+        canvas {
+            border: 1px solid;
+        }
+    </style>
+    <canvas></canvas>
+    <script>
+        const colors = {
+            light: "#fff",
+            dark: "#000"
+        }
+        const pathsData = {
+            leftArc: {
+                paths: [],
+                fill: colors.light
+            },
+            rightArc: {
+                paths: [],
+                fill: colors.dark
+            },
+            topInnerArc: {
+                paths: [],
+                fill: colors.light
+            },
+            topInnerCircle: {
+                paths: [],
+                fill: colors.dark,
+            },
+            bottomInnerArc: {
+                paths: [],
+                fill: colors.dark
+            },
+            bottomInnerCircle: {
+                paths: [],
+                fill: colors.light,
+            }
+        }
+        const size = 500;
+        const N = 50;
+
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        canvas.width = size;
+        canvas.height = size;
+
+        const outerRadius = 250;
+        const innerRadius = outerRadius / 2;
+
+        const centerX = size / 2;
+        const centerY = size / 2;
+
+
+        function getArcPaths(startAngle, endAngle, radius, centerX, centerY) {
+            const paths = [];
+
+            // ctx.beginPath();
+            for (let i = 0; i <= N; i++) {
+                const angle = startAngle + (i / N) * (endAngle - startAngle);
+                const x = Math.cos(angle) * radius + centerX;
+                const y = Math.sin(angle) * radius + centerY;
+                // if (i === 0) {
+                //     ctx.moveTo(x, y);
+                // }
+                // ctx.lineTo(x, y);
+
+                paths.push({ x, y });
+            }
+
+            return paths;
+        }
+
+
+        function drawMainCircles() {
+            // right half
+            pathsData.rightArc.paths = getArcPaths(-Math.PI / 2, Math.PI / 2, outerRadius,
+                centerX, centerY);
+            // ctx.fillStyle = colors.dark;
+            // ctx.fill();
+            // ctx.stroke();
+            // left half
+            pathsData.leftArc.paths = getArcPaths(Math.PI / 2, Math.PI * 1.5, outerRadius,
+                centerX, centerY);
+            // ctx.fillStyle = colors.light;
+            // ctx.fill();
+            // ctx.stroke();
+        }
+
+        function drawInnerArcs(params) {
+            pathsData.topInnerArc.paths = getArcPaths(-Math.PI / 2, Math.PI / 2, innerRadius, centerX, centerY / 2);
+            ctx.fillStyle = colors.light;
+            // ctx.fill();
+            // ctx.stroke();
+            pathsData.bottomInnerArc.paths = getArcPaths(Math.PI / 2, -Math.PI / 2, -innerRadius,
+                centerX, (centerY * 3) / 2);
+            // ctx.fillStyle = colors.dark
+            // ctx.fill();
+            // ctx.stroke();
+        }
+
+        function drawInnerCircles() {
+            pathsData.topInnerCircle.paths = getArcPaths(0, Math.PI * 2, innerRadius / 4, centerX, centerY / 2);
+            ctx.fillStyle = colors.dark
+            // ctx.fill();
+            // ctx.stroke();
+
+            pathsData.bottomInnerCircle.paths = getArcPaths(0, Math.PI * 2, innerRadius / 4, centerX, (centerY * 3) / 2);
+            ctx.fillStyle = colors.light;
+            // ctx.fill();
+            // ctx.stroke();
+        }
+
+        drawMainCircles();
+        drawInnerArcs();
+        drawInnerCircles();
+
+        let currentKeyIndex = 0;
+        let currentKey = Object.keys(pathsData)[currentKeyIndex];
+        let currentPathIndex = 0;
+        const totalDuration = 1000;
+        let lastTime = performance.now();
+
+        function animate(timestamp) {
+            const itemPaths = pathsData[currentKey].paths;
+            const itemFill = pathsData[currentKey].fill;
+
+            if (currentPathIndex === 0) {
+                ctx.beginPath();
+                ctx.moveTo(itemPaths[0].x, itemPaths[0].y);
+            }
+
+            if (currentPathIndex < itemPaths.length) {
+                ctx.lineTo(itemPaths[currentPathIndex].x, itemPaths[currentPathIndex].y);
+                ctx.stroke();
+            }
+
+            if (currentPathIndex === itemPaths.length - 1) {
+                ctx.fillStyle = itemFill;
+                ctx.fill();
+
+                if (itemFill === colors.dark) {
+                    ctx.strokeStyle = colors.light;
+                }
+                else {
+                    ctx.strokeStyle = colors.dark;
+                }
+                ctx.stroke();
+            }
+
+            const elapsedTime = timestamp - lastTime;
+            if (elapsedTime >= totalDuration / itemPaths.length) {
+                currentPathIndex++;
+                lastTime = timestamp;
+            }
+
+            if (currentPathIndex >= itemPaths.length) {
+                currentPathIndex = 0;
+                currentKeyIndex++;
+
+                if (currentKeyIndex < Object.keys(pathsData).length) {
+                    currentKey = Object.keys(pathsData)[currentKeyIndex];
+                } else {
+                    return;
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate()
+
+
+    </script>
+</body>
+
+</html>
