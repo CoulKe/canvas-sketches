@@ -133,59 +133,59 @@
         drawInnerArcs();
         drawInnerCircles();
 
-        let currentKeyIndex = 0;
-        let currentKey = Object.keys(pathsData)[currentKeyIndex];
-        let currentPathIndex = 0;
-        const totalDuration = 1000;
-        let lastTime = performance.now();
+        // Disable animation.
+        // let currentKeyIndex = 0;
+        // let currentKey = Object.keys(pathsData)[currentKeyIndex];
+        // let currentPathIndex = 0;
+        // const totalDuration = 1000;
+        // let lastTime = performance.now();
 
-        function animate(timestamp) {
-            const itemPaths = pathsData[currentKey].paths;
-            const itemFill = pathsData[currentKey].fill;
+        // function animate(timestamp) {
+        //     const itemPaths = pathsData[currentKey].paths;
+        //     const itemFill = pathsData[currentKey].fill;
 
-            if (currentPathIndex === 0) {
-                ctx.beginPath();
-                ctx.moveTo(itemPaths[0].x, itemPaths[0].y);
-            }
+        //     if (currentPathIndex === 0) {
+        //         ctx.beginPath();
+        //         ctx.moveTo(itemPaths[0].x, itemPaths[0].y);
+        //     }
 
-            if (currentPathIndex < itemPaths.length) {
-                ctx.lineTo(itemPaths[currentPathIndex].x, itemPaths[currentPathIndex].y);
-                ctx.stroke();
-            }
+        //     if (currentPathIndex < itemPaths.length) {
+        //         ctx.lineTo(itemPaths[currentPathIndex].x, itemPaths[currentPathIndex].y);
+        //         ctx.stroke();
+        //     }
 
-            if (currentPathIndex === itemPaths.length - 1) {
-                ctx.fillStyle = itemFill;
-                ctx.fill();
+        //     if (currentPathIndex === itemPaths.length - 1) {
+        //         ctx.fillStyle = itemFill;
+        //         ctx.fill();
 
-                if (itemFill === colors.dark) {
-                    ctx.strokeStyle = colors.light;
-                }
-                else {
-                    ctx.strokeStyle = colors.dark;
-                }
-                ctx.stroke();
-            }
+        //         if (itemFill === colors.dark) {
+        //             ctx.strokeStyle = colors.light;
+        //         }
+        //         else {
+        //             ctx.strokeStyle = colors.dark;
+        //         }
+        //         ctx.stroke();
+        //     }
 
-            const elapsedTime = timestamp - lastTime;
-            if (elapsedTime >= totalDuration / itemPaths.length) {
-                currentPathIndex++;
-                lastTime = timestamp;
-            }
+        //     const elapsedTime = timestamp - lastTime;
+        //     if (elapsedTime >= totalDuration / itemPaths.length) {
+        //         currentPathIndex++;
+        //         lastTime = timestamp;
+        //     }
 
-            if (currentPathIndex >= itemPaths.length) {
-                currentPathIndex = 0;
-                currentKeyIndex++;
+        //     if (currentPathIndex >= itemPaths.length) {
+        //         currentPathIndex = 0;
+        //         currentKeyIndex++;
 
-                if (currentKeyIndex < Object.keys(pathsData).length) {
-                    currentKey = Object.keys(pathsData)[currentKeyIndex];
-                } else {
-                    return;
-                }
-            }
+        //         if (currentKeyIndex < Object.keys(pathsData).length) {
+        //             currentKey = Object.keys(pathsData)[currentKeyIndex];
+        //         } else {
+        //             return;
+        //         }
+        //     }
 
-            requestAnimationFrame(animate);
-        }
-        // disabled animation.
+        //     requestAnimationFrame(animate);
+        // }
         // animate()
 
 
