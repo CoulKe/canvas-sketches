@@ -9,8 +9,14 @@
 
 <body>
     <style>
-        canvas {
-            border: 1px solid;
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            display: grid;
+            place-items: center;
         }
     </style>
     <canvas></canvas>
@@ -67,15 +73,15 @@
         function getArcPaths(startAngle, endAngle, radius, centerX, centerY) {
             const paths = [];
 
-            // ctx.beginPath();
+            ctx.beginPath();
             for (let i = 0; i <= N; i++) {
                 const angle = startAngle + (i / N) * (endAngle - startAngle);
                 const x = Math.cos(angle) * radius + centerX;
                 const y = Math.sin(angle) * radius + centerY;
-                // if (i === 0) {
-                //     ctx.moveTo(x, y);
-                // }
-                // ctx.lineTo(x, y);
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                }
+                ctx.lineTo(x, y);
 
                 paths.push({ x, y });
             }
@@ -88,39 +94,39 @@
             // right half
             pathsData.rightArc.paths = getArcPaths(-Math.PI / 2, Math.PI / 2, outerRadius,
                 centerX, centerY);
-            // ctx.fillStyle = colors.dark;
-            // ctx.fill();
-            // ctx.stroke();
+            ctx.fillStyle = colors.dark;
+            ctx.fill();
+            ctx.stroke();
             // left half
             pathsData.leftArc.paths = getArcPaths(Math.PI / 2, Math.PI * 1.5, outerRadius,
                 centerX, centerY);
-            // ctx.fillStyle = colors.light;
-            // ctx.fill();
-            // ctx.stroke();
+            ctx.fillStyle = colors.light;
+            ctx.fill();
+            ctx.stroke();
         }
 
         function drawInnerArcs(params) {
             pathsData.topInnerArc.paths = getArcPaths(-Math.PI / 2, Math.PI / 2, innerRadius, centerX, centerY / 2);
             ctx.fillStyle = colors.light;
-            // ctx.fill();
-            // ctx.stroke();
+            ctx.fill();
+            ctx.stroke();
             pathsData.bottomInnerArc.paths = getArcPaths(Math.PI / 2, -Math.PI / 2, -innerRadius,
                 centerX, (centerY * 3) / 2);
-            // ctx.fillStyle = colors.dark
-            // ctx.fill();
-            // ctx.stroke();
+            ctx.fillStyle = colors.dark
+            ctx.fill();
+            ctx.stroke();
         }
 
         function drawInnerCircles() {
             pathsData.topInnerCircle.paths = getArcPaths(0, Math.PI * 2, innerRadius / 4, centerX, centerY / 2);
             ctx.fillStyle = colors.dark
-            // ctx.fill();
-            // ctx.stroke();
+            ctx.fill();
+            ctx.stroke();
 
             pathsData.bottomInnerCircle.paths = getArcPaths(0, Math.PI * 2, innerRadius / 4, centerX, (centerY * 3) / 2);
             ctx.fillStyle = colors.light;
-            // ctx.fill();
-            // ctx.stroke();
+            ctx.fill();
+            ctx.stroke();
         }
 
         drawMainCircles();
@@ -179,8 +185,8 @@
 
             requestAnimationFrame(animate);
         }
-
-        animate()
+        // disabled animation.
+        // animate()
 
 
     </script>
