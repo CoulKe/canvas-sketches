@@ -1,0 +1,105 @@
+<style>
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+    }
+
+    canvas {
+        border: 1px solid black;
+    }
+</style>
+<canvas id="noiseCanvas"></canvas>
+<script>
+    function drawRoundedRect(ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.arcTo(x + width, y, x + width, y + radius, radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+        ctx.lineTo(x + radius, y + height);
+        ctx.arcTo(x, y + height, x, y + height - radius, radius);
+        ctx.lineTo(x, y + radius);
+        ctx.arcTo(x, y, x + radius, y, radius);
+        ctx.closePath();
+    }
+
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = 800;
+    canvas.height = 800;
+
+    const innerRectWidth = 250;
+    const innerRectHeight = 200;
+    const outerRectWidth = innerRectWidth + 80
+    const outerRectHeight = innerRectHeight + 30;
+    const borderRadius = 8;
+    const innerX = (canvas.width - innerRectWidth) / 2;
+    const innerY = (canvas.height - innerRectHeight) / 2;
+    const outerX = innerX - 10;
+    const outerY = innerY - 15;
+
+    function generateNoise(x, y, width, height) {
+        const imageData = ctx.createImageData(width, height);
+        const pixels = imageData.data;
+
+        for (let i = 0; i < pixels.length; i += 4) {
+            const value = Math.random() * 255;
+            pixels[i] = pixels[i + 1] = pixels[i + 2] = value;
+            pixels[i + 3] = 255;
+        }
+
+        ctx.putImageData(imageData, x, y);
+    }
+
+    ctx.fillStyle = "black";
+    drawRoundedRect(ctx, innerX, innerY, innerRectWidth, innerRectHeight, borderRadius);
+    ctx.fill();
+    ctx.stroke();
+    drawRoundedRect(ctx, outerX, outerY, outerRectWidth, outerRectHeight, borderRadius);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(outerX + outerRectWidth - 30, outerY + outerRectHeight - 70, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(outerX + outerRectWidth - 30, outerY + outerRectHeight - 30, 10, 0, Math.PI * 2);
+    ctx.fill();
+
+    function drawAntenna() {
+        ctx.save();
+        ctx.beginPath();
+
+        const centerX = outerX + outerRectWidth / 2;
+        const topY = outerY - 53;
+
+        const angle = Math.PI;
+
+        ctx.translate(centerX, topY);
+
+        ctx.rotate(angle);
+
+        ctx.moveTo(-50, 0);
+        ctx.lineTo(0, -50);
+        ctx.lineTo(50, 0);
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
+
+    function animate() {
+        drawAntenna();
+        generateNoise(innerX, innerY, innerRectWidth, innerRectHeight);
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+</script>
