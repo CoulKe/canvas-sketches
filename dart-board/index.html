@@ -88,8 +88,8 @@
 
                 let midAngle = lerp(angle1, angle2, 0.5);
 
-                const x = width / 2 + Math.cos(midAngle) * outerRadius;
-                const y = width / 2 + Math.sin(midAngle) * outerRadius;
+                const x = width / 2 + Math.sin(midAngle) * outerRadius;
+                const y = width / 2 + Math.cos(midAngle) * outerRadius;
                 // console.log(x, y)
                 ctx.beginPath();
                 ctx.strokeStyle = colors.light;
