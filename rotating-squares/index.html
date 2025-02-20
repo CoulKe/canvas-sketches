@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Squares</title>
+</head>
+
+<body>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            display: grid;
+            place-items: center;
+        }
+
+        canvas {
+            border: 1px solid;
+        }
+    </style>
+    <canvas></canvas>
+    <script>
+        const canvas = document.querySelector('canvas');
+        canvas.width = innerWidth * 0.9;
+        canvas.height = innerHeight * 0.9;
+        const ctx = canvas.getContext('2d');
+
+        let size = 1000;
+        const duration = 100;
+        const minSize = 10;
+        const scalingFactor = 0.88;
+        const angleStep = 30;
+
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+
+        function drawSquare(x, y, size) {
+            ctx.beginPath();
+            ctx.rect(x, y, size, size);
+            ctx.stroke();
+        }
+
+        function animate() {
+            if (minSize > size) return;
+            const x = y = -size / 2;
+
+            drawSquare(x, y, size);
+
+            ctx.closePath();
+            
+            ctx.rotate(angleStep);
+            
+            size *= scalingFactor
+
+            setTimeout(() => requestAnimationFrame(animate), duration);
+        }
+
+        animate();
+
+    </script>
+</body>
+
+</html>
