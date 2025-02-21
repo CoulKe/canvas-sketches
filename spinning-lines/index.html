@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinning lines</title>
+</head>
+
+<body>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            display: grid;
+            place-items: center;
+        }
+
+        canvas {
+            border: 1px solid;
+        }
+    </style>
+    <canvas></canvas>
+    <script>
+        const colors = [
+            '#8E33FF',
+            '#FF33A8',
+            '#FF3333',
+            '#FF5733',
+            '#FF8D1A',
+            '#FFC300',
+            '#DAF7A6',
+            '#33FF57',
+            '#33FFF3',
+            '#3375FF',
+        ];
+
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        const N = colors.length;
+
+        canvas.width = innerWidth * 0.8;
+        canvas.height = innerHeight * 0.8;
+
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+
+        const lineWidth = 400;
+        let progress = 0;
+        let direction = 1;
+        let angle = 0;
+
+        function drawCircle(x, fill) {
+            ctx.beginPath();
+            ctx.arc(x, 0, 10, 0, Math.PI * 2);
+            ctx.fillStyle = fill;
+            ctx.fill();
+            ctx.lineWidth=1
+            ctx.strokeStyle = "#000"
+            ctx.stroke();
+        }
+
+        function drawLine(stroke) {
+            ctx.beginPath();
+            ctx.moveTo(-lineWidth / 2, 0);
+            ctx.lineTo(lineWidth / 2, 0);
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = 4
+            ctx.stroke();
+        }
+
+        function lerp(a, b, t) {
+            return a + (b - a) * t;
+        }
+
+        function animate() {
+            ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+
+            for (let i = 0; i < N; i++) {
+                ctx.save();
+                // ctx.rotate(angle * (i * (Math.PI * 2) / (N)));
+                ctx.rotate(angle * (i * (Math.PI) / (N)));
+                drawLine(colors[i]);
+                const x = lerp(-lineWidth / 2, lineWidth / 2, progress);
+                drawCircle(x, colors[i]);
+                ctx.restore();
+            }
+
+            progress += 0.01 * direction;
+            if (progress >= 1 || progress <= 0) direction *= -1;
+
+            angle += 0.01;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>
